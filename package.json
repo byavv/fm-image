@@ -21,6 +21,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "aws-sdk": "^2.3.16",
+    "body-parser": "^1.15.2",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
     "cross-env": "^2.0.0",
