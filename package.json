@@ -1,18 +1,29 @@
 {
   "name": "image",
   "version": "1.0.0",
+  "author": "Viacheslav Aksenchyk <aksenchyk.v@gmail.com>",
   "main": "server/server.js",
   "scripts": {
-    "start": "node .",
-    "dev": "make dev",
-    "test": "make test-cov"
+    "start": "cross-env NODE_ENV=production node .",
+    "test": "cross-env NODE_ENV=test DEBUG=test istanbul cover node_modules/mocha/bin/_mocha -- -R spec test/*.spec.js",
+    "dev": "cross-env NODE_ENV=development DEBUG=ms:* node .",
+    "test-cov": "cross-env NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec test/*.spec.js && cat ./coverage/lcov.info | ./node_modules/.bin/codecov",
+    "clean": "npm run clean:coverage && npm run clean:temp && npm run clean:build",
+    "clean:coverage": "rm -rf ./coverage",
+    "clean:temp": "rm -rf ./tmp/*",
+    "clean:build": "rm -rf ./build/*",
+    "serve": "nodemon .",
+    "pm2": "cross-env NODE_ENV=production DEBUG=ms:* pm2 start . --name=ms-tracker -i max --no-daemon"
+  },
+  "engines": {
+    "node": ">=6.0"
   },
   "dependencies": {
-    "amqplib": "^0.4.1",
-    "async": "^2.0.0-rc.5",
+    "async": "^2.0.1",
     "aws-sdk": "^2.3.16",
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "cross-env": "^2.0.0",
     "debug": "^2.2.0",
     "etcd-registry": "^2.1.1",
     "helmet": "^0.14.0",
@@ -22,8 +33,9 @@
     "loopback-datasource-juggler": "^2.39.0",
     "multer": "^1.1.0",
     "multer-s3": "^2.3.2",
+    "rabbot": "^1.0.5",
     "serve-favicon": "^2.0.1",
-    "wascally": "^0.2.10"
+    "winston": "^2.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

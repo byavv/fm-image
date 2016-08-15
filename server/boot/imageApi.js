@@ -1,6 +1,6 @@
 "use strict"
 const aws = require('aws-sdk')
-  , debug = require('debug')('image');
+  , debug = require('debug')('ms:image');
 module.exports = function (server) {
   var s3 = new aws.S3({
     accessKeyId: server.get('aws').accessKeyId,

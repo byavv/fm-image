@@ -1,10 +1,11 @@
 "use strict"
-const rabbit = require('wascally')
+const rabbit = require('rabbot')
     , async = require('async')
     , aws = require('aws-sdk')
-    , debug = require('debug')('image');
+    , logger = require("../lib/logger")
+    , debug = require('debug')('ms:image');
 
-module.exports = function (app, done) {
+module.exports = function (app) {
     const s3 = new aws.S3({
         accessKeyId: app.get('aws').accessKeyId,
         secretAccessKey: app.get('aws').secretAccessKey,
@@ -26,20 +27,18 @@ module.exports = function (app, done) {
                 err ? message.nack() : message.ack();
             });
         });
+        app.rabbit = rabbit;
+        logger.info(`Service ${app.get('ms_name')} joined rabbit network`);
     }
-    if (process.env.NODE_ENV != 'test')
+    app.once('started', () => {
         require('../lib/topology')(rabbit, {
             name: app.get('ms_name'),
             host: app.get("rabbit_host")
         })
             .then(handle)
-            .then(() => {
-                app.rabbit = rabbit;
-                debug("Rabbit client started");
+            .catch((err) => {
+                logger.error(`Error when joining rabbit network: ${err}`);
+                throw err;
             })
-            .then(done);
-
-    app.close = () => {
-        rabbit.closeAll();
-    };
+    });
 }
