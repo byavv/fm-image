@@ -44,7 +44,8 @@
         "bucket": "carmarket",
         "maxCount": 20,
         "field": "images",
-        "awsKey": "${aws}"       
+        "awsSecretKey": "${awsSecretKey}",
+        "awsAccessKey": "${awsAccessKey}"       
       }
     },
     "body-parser#json": {

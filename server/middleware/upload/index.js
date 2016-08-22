@@ -6,8 +6,8 @@ var aws = require('aws-sdk');
 module.exports = function (options) {
     //  var {accessKeyId, secretAccessKey} = options.awsKey;    
     var s3 = new aws.S3({
-        accessKeyId: options.awsKey.accessKeyId,
-        secretAccessKey: options.awsKey.secretAccessKey,
+        accessKeyId: options.awsAccessKey,
+        secretAccessKey: options.awsSecretKey,
         signatureVersion: 'v4'
     });
     var upload = multer({

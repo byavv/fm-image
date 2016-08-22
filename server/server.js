@@ -16,6 +16,8 @@ if (!process.env.HTTP_HOST) { logger.warn(`HTTP_HOST environment is not set, try
 if (!process.env.ETCD_HOST) { logger.warn(`ETCD_HOST environment is not set, try default ${etcd_host}`); }
 if (!process.env.BROCKER_HOST) { logger.warn(`BROCKER_HOST environment is not set, try default ${rabbit_host}`); }
 if (!process.env.DBSOURCE_HOST) { logger.warn(`DBSOURCE_HOST environment is not set, try default ${mongo_host}`); }
+if (!process.env.AWS_ACCESS_KEY) { logger.error(`AWS_ACCESS_KEY is not set`); }
+if (!process.env.AWS_SECRET_KEY) { logger.error(`AWS_SECRET_KEY is not set`); }
 
 
 app.set("mongo_host", mongo_host);
@@ -23,6 +25,8 @@ app.set("http_port", http_port);
 app.set("etcd_host", etcd_host);
 app.set("rabbit_host", rabbit_host);
 app.set("ms_name", 'image');
+app.set("awsAccessKey", process.env.AWS_ACCESS_KEY);
+app.set("awsSecretKey", process.env.AWS_SECRET_KEY)
 
 boot(app, __dirname, (err) => {
     if (err) throw err;
