@@ -1,5 +1,6 @@
 "use strict"
 const aws = require('aws-sdk')
+  , logger = require("../lib/logger")
   , debug = require('debug')('ms:image');
 module.exports = function (server) {
   var s3 = new aws.S3({
@@ -26,11 +27,13 @@ module.exports = function (server) {
             body: { carId: req.body.carId, key: req.body.key }
           }).then(() => {
             debug(`DELETED ${req.body.key} IMAGE`);
+            logger.info(`S3 object removed success, key: ${req.body.key}`);
             return res.status(200).send({ message: "delete success" });
           });
         }
       });
     } else {
+      logger.error(`Wrong request format: ${req.body}`);
       return res.status(400).send({ message: "Format error, key not found" });
     }
 
@@ -46,9 +49,9 @@ module.exports = function (server) {
       routingKey: "messages",
       body: { carId: carId, files: files }
     }).then(() => {
+      logger.info(`S3 objects (${files.length}) upload success`);
       return res.status(200).send({ message: "upload success" });
     });
-
   });
   server.use(router);
 };
