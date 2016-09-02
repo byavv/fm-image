@@ -24,7 +24,8 @@ module.exports = function (app) {
                     callback(err, data)
                 });
             }, (err, res) => {
-                err ? message.nack() : message.ack();
+                if (err) logger.error();
+                message.ack();
             });
         });
         app.rabbit = rabbit;
